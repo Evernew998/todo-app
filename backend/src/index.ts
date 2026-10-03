@@ -92,6 +92,29 @@ const resolvers: Resolvers = {
       tasks = tasks.concat(newTask)
       return newTask
     },
+    updateTask: (_parent, args, context) => {
+      const user = requireUser(context)
+      const taskToUpdateIndex = tasks.findIndex((t) => t.id === args.id && t.userId === user.id)
+      if (taskToUpdateIndex < 0) return null
+
+      const existing = tasks[taskToUpdateIndex]
+      const updatedTask: Task = {
+        ...existing,
+        text: args.input.text ?? existing.text,
+        completed: args.input.completed ?? existing.completed,
+      }
+      tasks[taskToUpdateIndex] = updatedTask
+      return updatedTask
+    },
+    deleteTask: (_parent, args, context) => {
+      const user = requireUser(context)
+
+      const taskToDelete = tasks.find((t) => t.id === args.id && t.userId === user.id)
+      if (!taskToDelete) return false
+
+      tasks = tasks.filter((t) => t.id !== args.id)
+      return true
+    },
   },
 }
 

@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Context } from '../types';
+import { Task as TaskModel, Context } from '../types';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
@@ -21,14 +21,21 @@ export type AuthPayload = {
 export type Mutation = {
   __typename?: 'Mutation';
   addTask?: Maybe<Task>;
+  deleteTask?: Maybe<Scalars['Boolean']['output']>;
   login: AuthPayload;
   logout: Scalars['Boolean']['output'];
   signup: AuthPayload;
+  updateTask?: Maybe<Task>;
 };
 
 
 export type MutationAddTaskArgs = {
   task: TaskInput;
+};
+
+
+export type MutationDeleteTaskArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -41,6 +48,12 @@ export type MutationLoginArgs = {
 export type MutationSignupArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateTaskArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateTaskInput;
 };
 
 export type Query = {
@@ -59,6 +72,11 @@ export type Task = {
 export type TaskInput = {
   completed: Scalars['Boolean']['input'];
   text: Scalars['String']['input'];
+};
+
+export type UpdateTaskInput = {
+  completed?: InputMaybe<Scalars['Boolean']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -146,8 +164,9 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
-  Task: ResolverTypeWrapper<Task>;
+  Task: ResolverTypeWrapper<TaskModel>;
   TaskInput: TaskInput;
+  UpdateTaskInput: UpdateTaskInput;
   User: ResolverTypeWrapper<User>;
 };
 
@@ -159,8 +178,9 @@ export type ResolversParentTypes = {
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
-  Task: Task;
+  Task: TaskModel;
   TaskInput: TaskInput;
+  UpdateTaskInput: UpdateTaskInput;
   User: User;
 };
 
@@ -171,9 +191,11 @@ export type AuthPayloadResolvers<ContextType = Context, ParentType extends Resol
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationAddTaskArgs, 'task'>>;
+  deleteTask?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'id'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   signup?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
+  updateTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationUpdateTaskArgs, 'id' | 'input'>>;
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
