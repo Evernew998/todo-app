@@ -20,7 +20,15 @@ export type AuthPayload = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  login: AuthPayload;
+  logout: Scalars['Boolean']['output'];
   signup: AuthPayload;
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 
@@ -139,6 +147,8 @@ export type AuthPayloadResolvers<ContextType = Context, ParentType extends Resol
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   signup?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
 };
 

@@ -32,6 +32,14 @@ function getUserFromToken(token: string | undefined): PublicUser | null {
   return user ? toPublicUser(user) : null
 }
 
+function requireUser(context: Context): PublicUser {
+  if (!context.user) {
+    throw new GraphQLError('You must be logged in', { extensions: { code: 'UNAUTHENTICATED' } })
+  }
+
+  return context.user
+}
+
 const resolvers: Resolvers = {
   Query: {
     me: (_parent, _args, context) => {
@@ -52,6 +60,25 @@ const resolvers: Resolvers = {
       users.push(newUser)
 
       return { token: createSession(newUser.id), user: toPublicUser(newUser) }
+    },
+    login: (_parent, args) => {
+      const user = users.find((u) => u.email === args.email && u.password === args.password)
+
+      if (!user) {
+        throw new GraphQLError('Invalid email or password', {
+          extensions: { code: 'UNAUTHENTICATED' },
+        })
+      }
+
+      return { token: createSession(user.id), user: toPublicUser(user) }
+    },
+    logout: (_parent, _args, context) => {
+      requireUser(context)
+      if (!context.token) {
+        return false
+      }
+      sessions.delete(context.token)
+      return true
     },
   },
 }
