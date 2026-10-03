@@ -1,3 +1,10 @@
+export type Task = {
+  id: string
+  text: string
+  completed: boolean
+  userId: string
+}
+
 export type User = {
   id: string
   email: string

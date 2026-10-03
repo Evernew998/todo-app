@@ -20,9 +20,15 @@ export type AuthPayload = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addTask?: Maybe<Task>;
   login: AuthPayload;
   logout: Scalars['Boolean']['output'];
   signup: AuthPayload;
+};
+
+
+export type MutationAddTaskArgs = {
+  task: TaskInput;
 };
 
 
@@ -39,7 +45,20 @@ export type MutationSignupArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  allTasks: Array<Task>;
   me?: Maybe<User>;
+};
+
+export type Task = {
+  __typename?: 'Task';
+  completed: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  text: Scalars['String']['output'];
+};
+
+export type TaskInput = {
+  completed: Scalars['Boolean']['input'];
+  text: Scalars['String']['input'];
 };
 
 export type User = {
@@ -127,6 +146,8 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Task: ResolverTypeWrapper<Task>;
+  TaskInput: TaskInput;
   User: ResolverTypeWrapper<User>;
 };
 
@@ -138,6 +159,8 @@ export type ResolversParentTypes = {
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
+  Task: Task;
+  TaskInput: TaskInput;
   User: User;
 };
 
@@ -147,13 +170,21 @@ export type AuthPayloadResolvers<ContextType = Context, ParentType extends Resol
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationAddTaskArgs, 'task'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   signup?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  allTasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+};
+
+export type TaskResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
+  completed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -165,6 +196,7 @@ export type Resolvers<ContextType = Context> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Task?: TaskResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

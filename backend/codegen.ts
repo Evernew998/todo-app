@@ -6,6 +6,9 @@ const config: CodegenConfig = {
     './src/generated/graphql.ts': {
       plugins: ['typescript', 'typescript-resolvers'],
       config: {
+        mappers: {
+          Task: '../types#Task as TaskModel',
+        },
         contextType: '../types#Context',
       },
     },

@@ -1,3 +1,14 @@
+type Task {
+  id: ID!
+  text: String!
+  completed: Boolean!
+}
+
+input TaskInput {
+  text: String!
+  completed: Boolean!
+}
+
 type User {
   id: ID!
   email: String!
@@ -9,6 +20,7 @@ type AuthPayload {
 }
 
 type Query {
+  allTasks: [Task!]!
   me: User
 }
 
@@ -16,4 +28,5 @@ type Mutation {
   signup(email: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
   logout: Boolean!
+  addTask(task: TaskInput!): Task
 }

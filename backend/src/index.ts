@@ -4,9 +4,11 @@ import { startStandaloneServer } from '@apollo/server/standalone'
 import { v4 as uuid } from 'uuid'
 import { GraphQLError } from 'graphql/error'
 import type { Resolvers } from './generated/graphql'
-import { User, PublicUser, Context } from './types'
+import { User, PublicUser, Context, Task } from './types'
 
 const typeDefs = readFileSync('./schema.graphql', 'utf-8')
+
+let tasks: Task[] = []
 
 let users: User[] = []
 
@@ -42,6 +44,10 @@ function requireUser(context: Context): PublicUser {
 
 const resolvers: Resolvers = {
   Query: {
+    allTasks: (_parent, _args, context) => {
+      const user = requireUser(context)
+      return tasks.filter((t) => t.userId === user.id)
+    },
     me: (_parent, _args, context) => {
       return context.user
     },
@@ -79,6 +85,12 @@ const resolvers: Resolvers = {
       }
       sessions.delete(context.token)
       return true
+    },
+    addTask: (_parent, args, context) => {
+      const user = requireUser(context)
+      const newTask: Task = { ...args.task, id: uuid(), userId: user.id }
+      tasks = tasks.concat(newTask)
+      return newTask
     },
   },
 }
