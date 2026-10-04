@@ -1,4 +1,4 @@
-import { View, Text, Button, FlatList, TextInput, Pressable } from 'react-native'
+import { View, Text, FlatList, TextInput, Pressable, StyleSheet } from 'react-native'
 import { useQuery, useApolloClient, useMutation } from '@apollo/client/react'
 import { GET_TASKS, ADD_TASK } from '@/graphql/tasks'
 import { useAuth } from '@/auth/AuthContext'
@@ -40,21 +40,75 @@ export default function TasksScreen() {
   if (error) return <Text>Error: {error.message}</Text>
 
   return (
-    <View style={{ flex: 1 }}>
-      <TextInput value={text} onChangeText={setText} placeholder='New task' />
-      <Pressable onPress={handleSubmit} disabled={addLoading}>
-        <Text>{addLoading ? 'Adding...' : 'Add Task'}</Text>
-      </Pressable>
+    <View style={styles.container}>
+      <View style={styles.addRow}>
+        <TextInput value={text} onChangeText={setText} placeholder='New task' style={styles.input} />
+        <Pressable
+          onPress={handleSubmit}
+          disabled={addLoading}
+          style={[styles.addButton, addLoading && styles.buttonDisabled]}
+        >
+          <Text style={styles.addButtonText}>{addLoading ? 'Adding...' : 'Add Task'}</Text>
+        </Pressable>
 
-      {addError && <Text>Couldn't add task: {addError.message}</Text>}
+        {addError && <Text style={styles.error}>Couldn't add task: {addError.message}</Text>}
+      </View>
 
       <FlatList
         data={data?.allTasks}
         keyExtractor={(task) => task.id}
         renderItem={({ item }) => <TaskItem task={item} />}
-        ListEmptyComponent={<Text>No tasks yet</Text>}
+        ListEmptyComponent={<Text style={styles.empty}>No tasks yet</Text>}
       />
-      <Button title='Log out' onPress={handleLogout} />
+      <Pressable style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutText}>Log out</Text>
+      </Pressable>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  message: { padding: 24, textAlign: 'center', color: '#64748b' },
+
+  addRow: { flexDirection: 'row', gap: 8, padding: 16 },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 16,
+    backgroundColor: 'white',
+  },
+  addButton: {
+    backgroundColor: '#2563eb',
+    borderRadius: 8,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  buttonDisabled: { opacity: 0.5 },
+  addButtonText: { color: 'white', fontWeight: '600', fontSize: 16 },
+
+  error: {
+    backgroundColor: '#fef2f2',
+    color: '#dc2626',
+    padding: 10,
+    borderRadius: 8,
+    marginHorizontal: 16,
+    marginBottom: 8,
+  },
+  empty: { textAlign: 'center', padding: 24, color: '#64748b' },
+
+  logoutButton: {
+    margin: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  logoutText: { color: '#334155', fontWeight: '500', fontSize: 16 },
+})
