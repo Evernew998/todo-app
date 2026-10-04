@@ -1,13 +1,10 @@
 import { View, Text, FlatList, TextInput, Pressable, StyleSheet } from 'react-native'
-import { useQuery, useApolloClient, useMutation } from '@apollo/client/react'
+import { useQuery, useMutation } from '@apollo/client/react'
 import { GET_TASKS, ADD_TASK } from '@/graphql/tasks'
-import { useAuth } from '@/auth/AuthContext'
 import { useState } from 'react'
 import TaskItem from '@/components/TaskItem'
 
 export default function TasksScreen() {
-  const { signOut } = useAuth()
-  const client = useApolloClient()
   const { data, loading, error } = useQuery(GET_TASKS)
   const [text, setText] = useState('')
 
@@ -24,11 +21,6 @@ export default function TasksScreen() {
     },
   })
 
-  async function handleLogout() {
-    await signOut()
-    await client.clearStore()
-  }
-
   function handleSubmit() {
     if (!text.trim()) return
 
@@ -36,8 +28,8 @@ export default function TasksScreen() {
     setText('')
   }
 
-  if (loading) return <Text>Loading...</Text>
-  if (error) return <Text>Error: {error.message}</Text>
+  if (loading) return <Text style={styles.message}>Loading...</Text>
+  if (error) return <Text style={styles.message}>Error: {error.message}</Text>
 
   return (
     <View style={styles.container}>
@@ -50,9 +42,8 @@ export default function TasksScreen() {
         >
           <Text style={styles.addButtonText}>{addLoading ? 'Adding...' : 'Add Task'}</Text>
         </Pressable>
-
-        {addError && <Text style={styles.error}>Couldn't add task: {addError.message}</Text>}
       </View>
+      {addError && <Text style={styles.error}>Couldn't add task: {addError.message}</Text>}
 
       <FlatList
         data={data?.allTasks}
@@ -60,9 +51,6 @@ export default function TasksScreen() {
         renderItem={({ item }) => <TaskItem task={item} />}
         ListEmptyComponent={<Text style={styles.empty}>No tasks yet</Text>}
       />
-      <Pressable style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Log out</Text>
-      </Pressable>
     </View>
   )
 }
@@ -100,15 +88,4 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   empty: { textAlign: 'center', padding: 24, color: '#64748b' },
-
-  logoutButton: {
-    margin: 16,
-    paddingVertical: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#cbd5e1',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  logoutText: { color: '#334155', fontWeight: '500', fontSize: 16 },
 })

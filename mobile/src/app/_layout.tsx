@@ -2,6 +2,7 @@ import { Stack } from 'expo-router'
 import { ApolloProvider } from '@apollo/client/react'
 import client from '../apolloClient'
 import { AuthProvider, useAuth } from '@/auth/AuthContext'
+import LogoutButton from '@/components/LogoutButton'
 
 function RootNavigator() {
   const { token, isLoading } = useAuth()
@@ -13,7 +14,13 @@ function RootNavigator() {
   return (
     <Stack>
       <Stack.Protected guard={isLoggedIn}>
-        <Stack.Screen name='index' options={{ title: 'My Tasks' }} />
+        <Stack.Screen
+          name='index'
+          options={{
+            title: 'My Tasks',
+            headerRight: () => <LogoutButton />,
+          }}
+        />
       </Stack.Protected>
 
       <Stack.Protected guard={!isLoggedIn}>
