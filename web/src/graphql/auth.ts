@@ -11,3 +11,9 @@ export const SIGNUP = graphql(`
     }
   }
 `)
+
+export const LOGOUT = graphql(`
+  mutation Logout {
+    logout
+  }
+`)

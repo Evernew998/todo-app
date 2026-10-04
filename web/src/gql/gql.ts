@@ -15,6 +15,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 type Documents = {
     "\n  mutation Signup($email: String!, $password: String!) {\n    signup(email: $email, password: $password) {\n      token\n      user {\n        id\n        email\n      }\n    }\n  }\n": typeof types.SignupDocument,
+    "\n  mutation Logout {\n    logout\n  }\n": typeof types.LogoutDocument,
     "\n  query GetTasks {\n    allTasks {\n      id\n      text\n      completed\n    }\n  }\n": typeof types.GetTasksDocument,
     "\n  mutation AddTask($task: TaskInput!) {\n    addTask(task: $task) {\n      id\n      text\n      completed\n    }\n  }\n": typeof types.AddTaskDocument,
     "\n  mutation DeleteTask($id: ID!) {\n    deleteTask(id: $id)\n  }\n": typeof types.DeleteTaskDocument,
@@ -22,6 +23,7 @@ type Documents = {
 };
 const documents: Documents = {
     "\n  mutation Signup($email: String!, $password: String!) {\n    signup(email: $email, password: $password) {\n      token\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignupDocument,
+    "\n  mutation Logout {\n    logout\n  }\n": types.LogoutDocument,
     "\n  query GetTasks {\n    allTasks {\n      id\n      text\n      completed\n    }\n  }\n": types.GetTasksDocument,
     "\n  mutation AddTask($task: TaskInput!) {\n    addTask(task: $task) {\n      id\n      text\n      completed\n    }\n  }\n": types.AddTaskDocument,
     "\n  mutation DeleteTask($id: ID!) {\n    deleteTask(id: $id)\n  }\n": types.DeleteTaskDocument,
@@ -46,6 +48,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation Signup($email: String!, $password: String!) {\n    signup(email: $email, password: $password) {\n      token\n      user {\n        id\n        email\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation Signup($email: String!, $password: String!) {\n    signup(email: $email, password: $password) {\n      token\n      user {\n        id\n        email\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation Logout {\n    logout\n  }\n"): (typeof documents)["\n  mutation Logout {\n    logout\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
