@@ -3,7 +3,7 @@ import { SetContextLink } from '@apollo/client/link/context'
 import { getToken } from './auth/token'
 
 const httpLink = new HttpLink({
-  uri: 'http://192.168.0.6:4000',
+  uri: process.env.EXPO_PUBLIC_API_URL,
 })
 
 const authLink = new SetContextLink(async ({ headers }) => {
