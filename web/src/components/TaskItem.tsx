@@ -19,8 +19,8 @@ export default function TaskItem({ task }: { task: Task }) {
   const isBusy = updateLoading || deleteLoading
 
   return (
-    <li>
-      <div>
+    <li className='rounded-lg border border-slate-200 px-3 py-2'>
+      <div className='flex items-center gap-3'>
         <input
           type='checkbox'
           id={task.id}
@@ -29,8 +29,16 @@ export default function TaskItem({ task }: { task: Task }) {
             updateTask({ variables: { id: task.id, input: { completed: !task.completed } } })
           }
           disabled={isBusy}
+          className='h-4 w-4 shrink-0 cursor-pointer accent-blue-600 disabled:opacity-50'
         />
-        <label htmlFor={task.id}>{task.text}</label>
+        <label
+          htmlFor={task.id}
+          className={`min-w-0 flex-1 cursor-pointer wrap-break-word ${
+            task.completed ? 'text-slate-400 line-through' : 'text-slate-900'
+          }`}
+        >
+          {task.text}
+        </label>
       </div>
 
       <button
@@ -38,11 +46,20 @@ export default function TaskItem({ task }: { task: Task }) {
         onClick={() => {
           if (confirm('Confirm to delete task?')) deleteTask({ variables: { id: task.id } })
         }}
+        className='shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50 cursor-pointer'
       >
         {deleteLoading ? 'Deleting...' : 'Delete'}
       </button>
-      {updateError && <p>Couldn't update task: {updateError.message}</p>}
-      {deleteError && <p>Couldn't delete task: {deleteError.message}</p>}
+      {updateError && (
+        <p className='mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600'>
+          Couldn't update task: {updateError.message}
+        </p>
+      )}
+      {deleteError && (
+        <p className='mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600'>
+          Couldn't delete task: {deleteError.message}
+        </p>
+      )}
     </li>
   )
 }

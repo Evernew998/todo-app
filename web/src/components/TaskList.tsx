@@ -28,30 +28,44 @@ export default function TaskList() {
     setText('')
   }
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error.message}</p>
+  if (loading) return <p className='text-center text-sm text-slate-500'>Loading...</p>
+  if (error)
+    return <p className='rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600'>Error: {error.message}</p>
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor='new-task'>New task</label>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-2 sm:flex-row'>
+        <label htmlFor='new-task' className='sr-only'>
+          New task
+        </label>
         <input
           id='new-task'
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder='New task'
+          className='min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20'
         />
-        <button type='submit' disabled={addLoading}>
+        <button
+          type='submit'
+          disabled={addLoading}
+          className='shrink-0 rounded-lg bg-blue-600 px-4 py-2 w-fit font-medium text-white hover:bg-blue-700 disabled:opacity-50 cursor-pointer'
+        >
           {addLoading ? 'Adding...' : 'Add Task'}
         </button>
       </form>
 
-      {addError && <p>Couldn't add task: {addError.message}</p>}
+      {addError && (
+        <p className='mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600'>
+          Couldn't add task: {addError.message}
+        </p>
+      )}
 
       {data?.allTasks.length === 0 ? (
-        <p>No tasks yet. Add your first one above.</p>
+        <p className='mt-6 text-center text-sm text-slate-500'>
+          No tasks yet. Add your first one above.
+        </p>
       ) : (
-        <ul>
+        <ul className='mt-6 space-y-2'>
           {data?.allTasks.map((task) => (
             <TaskItem key={task.id} task={task} />
           ))}
