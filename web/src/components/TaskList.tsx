@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client/react'
 import { GET_TASKS, ADD_TASK } from '../graphql/tasks'
+import TaskItem from './TaskItem'
 
 export default function TaskList() {
   const { data, loading, error } = useQuery(GET_TASKS)
@@ -52,7 +53,7 @@ export default function TaskList() {
       ) : (
         <ul>
           {data?.allTasks.map((task) => (
-            <li key={task.id}>{task.text}</li>
+            <TaskItem key={task.id} task={task} />
           ))}
         </ul>
       )}
