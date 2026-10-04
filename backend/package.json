@@ -16,6 +16,7 @@
   "dependencies": {
     "@apollo/server": "^5.5.1",
     "graphql": "^16.14.2",
+    "tsx": "^4.23.15",
     "uuid": "^14.0.2"
   },
   "devDependencies": {
@@ -23,7 +24,6 @@
     "@graphql-codegen/typescript": "^6.1.0",
     "@graphql-codegen/typescript-resolvers": "^6.1.0",
     "@types/node": "^26.6.4",
-    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }

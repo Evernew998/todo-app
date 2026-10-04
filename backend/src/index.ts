@@ -121,7 +121,7 @@ const resolvers: Resolvers = {
 const server = new ApolloServer<Context>({ typeDefs, resolvers })
 
 startStandaloneServer(server, {
-  listen: { port: 4000 },
+  listen: { port: Number(process.env.PORT) || 4000 },
   context: async ({ req }): Promise<Context> => {
     const header = req.headers.authorization ?? ''
     const token = header.replace('Bearer ', '')
