@@ -3,6 +3,7 @@ import { useQuery, useApolloClient, useMutation } from '@apollo/client/react'
 import { GET_TASKS, ADD_TASK } from '@/graphql/tasks'
 import { useAuth } from '@/auth/AuthContext'
 import { useState } from 'react'
+import TaskItem from '@/components/TaskItem'
 
 export default function TasksScreen() {
   const { signOut } = useAuth()
@@ -50,7 +51,7 @@ export default function TasksScreen() {
       <FlatList
         data={data?.allTasks}
         keyExtractor={(task) => task.id}
-        renderItem={({ item }) => <Text>{item.text}</Text>}
+        renderItem={({ item }) => <TaskItem task={item} />}
         ListEmptyComponent={<Text>No tasks yet</Text>}
       />
       <Button title='Log out' onPress={handleLogout} />
