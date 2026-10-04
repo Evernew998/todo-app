@@ -1,11 +1,35 @@
+import { Stack } from 'expo-router'
 import { ApolloProvider } from '@apollo/client/react'
 import client from '../apolloClient'
-import { Stack } from 'expo-router'
+import { AuthProvider, useAuth } from '@/auth/AuthContext'
+
+function RootNavigator() {
+  const { token, isLoading } = useAuth()
+
+  if (isLoading) return null
+
+  const isLoggedIn = token ? true : false
+
+  return (
+    <Stack>
+      <Stack.Protected guard={isLoggedIn}>
+        <Stack.Screen name='index' options={{ title: 'My Tasks' }} />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!isLoggedIn}>
+        <Stack.Screen name='login' options={{ title: 'Login' }} />
+        <Stack.Screen name='signup' options={{ title: 'Sign Up' }} />
+      </Stack.Protected>
+    </Stack>
+  )
+}
 
 export default function RootLayout() {
   return (
     <ApolloProvider client={client}>
-      <Stack />
+      <AuthProvider>
+        <RootNavigator />
+      </AuthProvider>
     </ApolloProvider>
   )
 }
