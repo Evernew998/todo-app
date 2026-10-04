@@ -3,7 +3,7 @@ import { SetContextLink } from '@apollo/client/link/context'
 import { getToken } from './auth/token'
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000',
+  uri: import.meta.env.VITE_API_URL,
 })
 
 const authLink = new SetContextLink(({ headers }) => {
